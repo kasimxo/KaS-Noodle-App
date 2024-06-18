@@ -43,11 +43,15 @@
       <h2>Abrigate</h2>
       <h1>Hola Eli</h1>
       <p>Soy super guay y tu también.</p>
+      <button id="test" value="test-1" name="test_1">Prueba</button>
     </div>
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const loadEl = document.querySelector('#load');
+        document.getElementById('test').addEventListener( 'click ', function() {
+          fetch('https://kas-noodle.web.app/prueba')
+        })
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
         // // The Firebase SDK is initialized and available here!
         //

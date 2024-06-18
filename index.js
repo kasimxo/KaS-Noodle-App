@@ -1,10 +1,13 @@
 import http from 'node:http'
 
-http.createServer(function (req, res) {
-    res.write('Hello World!'); //write a response to the client
-    console.log('Ha llegado una petición')
-    res.end(); //end the response
-}).listen(8080)
+function procesarPeticion(req, res) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
+    if (req.url === '/prueba') {
+        res.end('<p>Has pasado la prueba</p>')
+    }
+}
+
+http.createServer(procesarPeticion).listen(8080)
 
 console.log("test")
 console.log("prueba")
