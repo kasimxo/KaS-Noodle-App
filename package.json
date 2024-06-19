@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "node --watch index.js"
+
   },
   "author": "kasimxo",
   "license": "ISC",
   "description": "",
   "type": "module",
   "dependencies": {
-    "firebase": "^10.12.2"
+    "express": "^4.19.2",
+    "firebase-functions": "^5.0.1",
+    "pdf-parse": "^1.1.1"
   },
   "devDependencies": {
     "standard": "^17.1.0"
