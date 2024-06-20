@@ -15,10 +15,23 @@ app.use((req, res, next) => {
 })
 
 app.get('/favicon.ico', function (req, res) {
-    console.log("Petición de icono")
     res.sendFile(path.join('static', 'favicon.ico'), { root: 'public' })
 });
-
+app.get('/static/NoodleLogotipoExtended_Inv720.png', function (req, res) {
+    res.sendFile(path.join('static', 'NoodleLogotipoExtended_Inv720.png'), { root: 'public' })
+})
+app.get('/css/style.css', function (req, res) {
+    res.sendFile(path.join('css', 'style.css'), { root: 'public' })
+})
+app.get('/static/pdf_icon.png', function (req, res) {
+    res.sendFile(path.join('static', 'pdf_icon.png'), { root: 'public' })
+})
+app.get('/static/csv_icon.png', function (req, res) {
+    res.sendFile(path.join('static', 'csv_icon.png'), { root: 'public' })
+})
+app.get('/js/script.js', function (req, res) {
+    res.sendFile(path.join('js', 'script.js'), { root: 'public' })
+})
 app.get('/', function (req, res) {
     res.sendFile(path.join('index.html'), { root: 'public' })
 })

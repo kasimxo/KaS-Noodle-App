@@ -2,79 +2,38 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <title>Noodle</title>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
   </head>
   <body>
-    <div id="message">
-      <h2>Abrigate</h2>
-      <h1 id="texto">Hola Eli</h1>
-      <p>Soy super guay y tu también.</p>
-      <button id="test" value="test" name="test" onclick="pruebaHello()">Prueba</button>
-      <button id="prueba" value="prueba" name="prueba" onclick="pruebaArchivo()">Archivo</button>
+    <div id="menu">
+      <img src="static/NoodleLogotipoExtended_Inv720.png" id="logo_ext"/>
     </div>
+    <main>
+      <section id="seleccionarArchivo">
+        <article id="pdfSelector" class="panel">
+          <img src="static/pdf_icon.png" class="icon_128"/>
+          <button id="btn_seleccionar_pdf" value="seleccionar_pdf" name="seleccionar_pdf" class="btn_subir_archivo" onclick="subirArchivoPDF()">Seleccionar archivo pdf</button>
+        </article>
+        <article id="csvSelector" class="panel">
+          <img src="static/csv_icon.png" class="icon_128"/>
+          <button id="btn_seleccionar_csv" value="seleccionar_csv" name="seleccionar_csv" class="btn_subir_archivo" onclick="not_implemented()">Seleccionar archivo csv</button>
+        </article>
+        
+      </section>
+      <div id="message">
+        <h2>Abrigate</h2>
+        <h1 id="texto">Hola Eli</h1>
+        <p>Soy super guay y tu también.</p>
+        <button id="test" value="test" name="test" onclick="pruebaHello()">Prueba</button>
 
-    <script>
-      function pruebaArchivo() {
-        var input = document.createElement('input')
-        input.type = 'file'
+      </div>
+  
+    </main>
+    <script src="js/script.js"></script>
 
-        input.onchange = e => {
-          var file = e.target.files[0]
-
-          var reader = new FileReader()
-          
-          reader.readAsDataURL(file);
-          
-          reader.onload = () => {
-
-          console.log("Hemos leido el pdf", file)
-
-          var response = fetch("http://localhost:8080/procesadormarco", {
-              method: "POST", // *GET, POST, PUT, DELETE, etc.
-              mode: "cors", // no-cors, *cors, same-origin
-              cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-              credentials: "same-origin", // include, *same-origin, omit
-              headers: {
-                "Content-Type": "application/pdf",
-              },
-              redirect: "follow", // manual, *follow, error
-              referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-              body: JSON.stringify(reader.result), // body data type must match "Content-Type" header
-            }).then(data => {
-              //console.log(data.body)
-            })
-            console.log("Archivo enviado")
-
-          }
-
-        }
-
-        input.click()
-      }
-      function pruebaHello() { 
-        fetch("http://localhost:8080/prueba").then(url => window.location.href = 'http://localhost:8080/prueba')
-      }
-      document.addEventListener('DOMContentLoaded', function() {
-        //const loadEl = document.querySelector('#load');
-
-      });
-    </script>
   </body>
 </html>
