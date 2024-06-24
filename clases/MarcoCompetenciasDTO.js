@@ -37,13 +37,9 @@ export class MarcoCompetenciasDTO {
         return siglas;
     }
 
-    generarNombreCorto() {
-        return "CFP" + categoria() + " " + siglas;
-    }
-
     categoria() {
-        if (nivel == null) { return ""; }
-        switch (nivel) {
+        if (this.nivel == null) { return ""; }
+        switch (this.nivel) {
             case "B":
                 return "GB";
             case "M":
@@ -55,8 +51,16 @@ export class MarcoCompetenciasDTO {
         }
     }
 
+    generarNombreCorto() {
+        var cat = this.categoria()
+        return "CFP" + cat + " " + this.siglas;
+    }
+
+
+
     ID() {
-        if (this.categoria != null && this.siglas != null) {
+        var cat = this.categoria()
+        if (cat != null && this.siglas != null) {
             return "mc_" + categoria().toLowerCase() + "_" + this.siglas.toLowerCase();
         }
         else {

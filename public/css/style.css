@@ -74,7 +74,7 @@ main {
 .btn_subir_archivo {
     border: 0px ;
     background-color: rgba(23,21,22,1);
-    padding: 10px;
+    padding: 10px 15px 10px 15px;
     border-radius: 20px;
     color: rgb(255, 255, 255);
     font-weight: bold; 

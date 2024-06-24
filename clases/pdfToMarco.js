@@ -65,7 +65,7 @@ function procesarTexto(text) {
     let frase = "";
 
     //Recorremos las líneas que componen el texto
-    lineas.forEach((line) => {
+    lineas.forEach((line, index) => {
         let linea = line;
         //Procesa una lína para asegurarse de que termina correctamente
         if (linea.Length > 2) {
@@ -90,6 +90,7 @@ function procesarTexto(text) {
             marco.siglas = marco.denominacionToSiglas(marco.denominacion);
             marco.nombreCortoCSV = marco.generarNombreCorto();
             marco.descripcionCSV = "Marco de competencias del ciclo de formación profesional: " + marco.denominacion + ".";
+
         }
 
         if (linea.trim().toLowerCase().startsWith("nivel") && linea.toLowerCase().includes(":")) {
@@ -110,9 +111,9 @@ function procesarTexto(text) {
             mod = limpiar(mod);
 
             //Comprueba si están en el mapa y si no es así los mete
-            if (!marco.competencias.includesKey(mod)) {
-                marco.competencias.Add(mod, new CompetenciaDTO(mod, i));
-                modu = mod;
+            if (!marco.competencias.hasOwnProperty(mod)) {
+                marco.competencias[mod.trim()] = new CompetenciaDTO(mod, index)
+                modu = mod.trim()
             }
             //modulos.add(new Modulo(mod));
             modulo = true;
@@ -127,8 +128,8 @@ function procesarTexto(text) {
             if (resultadoAprendizaje) {
                 //Aquí vamos a procesar la línea porque estamos dentro de los resultados de aprendizaje
                 //Regex para el identificador del resultado de aprendizaje
-                let reg1 = new Regex("^[1-9]\\.\\s.*");
-                if (reg1.IsMatch(linea)) {
+                let reg1 = "^[1-9]\\.\\s.*"
+                if (linea.match(reg1)) {
                     //Si detectamos un nuevo RA tras procesar los CEs del anterior
                     if (ce != null) {
                         try {
@@ -139,10 +140,10 @@ function procesarTexto(text) {
                     }
 
                     //Al crear un nuevo resultado de aprendizaje, limpiamos la numeración que lleve al principio
-                    let limpiarRA = new Regex("^[1-9]\\.\\s");
-                    let cleanRA = limpiarRA.replace(linea, ""); //El string limpio
-                    ra = new ResultadoAprendizajeDTO(cleanRA, i);
-
+                    let limpiarRA = "^[1-9]\\.\\s"
+                    let cleanRA = linea.replace(limpiarRA, "") //El string limpio
+                    ra = new ResultadoAprendizajeDTO(cleanRA, index);
+                    console.log("Hemos creado un criterio de evaluación")
                     //Marcamos los criterios de evaluación como false
                     //hasta que lleguemos a los ces de este ra
                     criteriosEvaluacion = false;
@@ -150,43 +151,44 @@ function procesarTexto(text) {
                     frase = "";
                 }
                 else if (!criteriosEvaluacion
-                    && linea.CompareTo("") != 0 && ra != null
+                    && linea !== ""
+                    && ra != null
                     && !linea.trim().toLowerCase().startsWith("criterios de evaluaci")
-                    && !regCabecera.IsMatch(linea)
-                    && regPie.IsMatch(linea)) {
+                    && !linea.match(regCabecera)
+                    && linea.match(regPie)) {
+                    console.log("Set de ra.nombre: ", ra.nombre)
                     ra.nombre += " " + linea;
-                    //ra.nombreCortoCSV += " " + linea;
                     ra.descripcionCSV += " " + linea;
                 }
                 else if (linea.trim().toLowerCase().startsWith("criterios de evaluaci")) {
                     //como vamos a empezar a meter los criterios de evaluación, el ra ya se ha formado
-
-                    marco.competencias[modu].ras.Add(ra.nombre, ra);
+                    console.log("Criterios de evaluación de RA: ", ra, ra.nombre)
+                    marco.competencias[modu].ras[ra.nombre] = ra
                     ultimora = ra.nombre;
                     criteriosEvaluacion = true;
                 }
                 else if (criteriosEvaluacion) {
                     //Regex para el identificador del criterio de evaluación
-                    let reg = new Regex("^[a-z]\\).*");
+                    let reg = "^[a-z]\\).*"
 
-                    if (reg.IsMatch(linea.trim().toLowerCase())) {
+                    if (linea.trim().toLowerCase().match(reg)) {
                         if (ce != null) {
                             try {
-                                marco.competencias[modu].ras[ultimora].criterios.Add(ce.descripcionCSV, ce);
+                                marco.competencias[modu].ras[ultimora].criterios[ce.descripcionCSV] = ce
                             }
                             catch (e) { }
                         }
 
                         //Al crear un CE primero lo limpiamos
-                        let limpiarCE = new Regex("^[a-z]\\)\\s");
-                        let cleanRA = limpiarCE.replace(linea, "");
-                        ce = new CriterioEvaluacionDTO(cleanRA, i);
+                        let limpiarCE = "^[a-z]\\)\\s"
+                        let cleanRA = linea.replace(limpiarCE, "")
+                        ce = new CriterioEvaluacionDTO(cleanRA, index);
                     }
                     else if (!linea.trim().toLowerCase().startsWith("contenidos")
                         && ce != null) {
 
 
-                        if (!regCabecera.IsMatch(linea) && regPie.IsMatch(linea)) {
+                        if (!linea.match(regCabecera) && linea.match(regPie)) {
                             ce.contenido += " " + linea;
                             ce.descripcionCSV += " " + linea;
                         }
@@ -207,7 +209,7 @@ function procesarTexto(text) {
         }
     })
 
-
+    console.log("Resultado del procesado: ", marco)
     return marco;
 
 }
@@ -223,8 +225,6 @@ export function pdfToMarco(body) {
     //Cargas todo
     pdf(dataBuffer).then(function (data) {
         console.log("Numero de páginas: ", data.numpages)
-        console.log(data.text)
-
 
         let marco = procesarTexto(data.text)
 
