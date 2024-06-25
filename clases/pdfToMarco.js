@@ -156,13 +156,12 @@ function procesarTexto(text) {
                     && !linea.trim().toLowerCase().startsWith("criterios de evaluaci")
                     && !linea.match(regCabecera)
                     && linea.match(regPie)) {
-                    console.log("Set de ra.nombre: ", ra.nombre)
                     ra.nombre += " " + linea;
                     ra.descripcionCSV += " " + linea;
                 }
                 else if (linea.trim().toLowerCase().startsWith("criterios de evaluaci")) {
                     //como vamos a empezar a meter los criterios de evaluación, el ra ya se ha formado
-                    console.log("Criterios de evaluación de RA: ", ra, ra.nombre)
+
                     marco.competencias[modu].ras[ra.nombre] = ra
                     ultimora = ra.nombre;
                     criteriosEvaluacion = true;
@@ -209,7 +208,6 @@ function procesarTexto(text) {
         }
     })
 
-    console.log("Resultado del procesado: ", marco)
     return marco;
 
 }
@@ -227,7 +225,8 @@ export function pdfToMarco(body) {
         console.log("Numero de páginas: ", data.numpages)
 
         let marco = procesarTexto(data.text)
-
+        marco.iniciarMarco()
+        console.log(marco)
     }).catch(function (err) {
         console.log("Se ha producido un error procesando el archivo pdf: ", err, err.msg)
     })
