@@ -1,11 +1,10 @@
 {
   "name": "kas-noodle-app",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "node --watch index.js"
-
+    "watch": "node --watch server/server.js"
   },
   "author": "kasimxo",
   "license": "ISC",
@@ -14,7 +13,9 @@
   "dependencies": {
     "express": "^4.19.2",
     "firebase-functions": "^5.0.1",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "standard": "^17.1.0"

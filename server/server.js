@@ -1,7 +1,6 @@
 import express from 'express'
 import { pdfToMarco } from './clases/pdfToMarco.js'
 import path from 'node:path'
-
 const app = express()
 
 app.disable('x-powered-by')
