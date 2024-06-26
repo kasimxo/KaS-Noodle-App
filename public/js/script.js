@@ -3,6 +3,11 @@ function not_implemented() {
     window.alert("No implementado todavía")
     console.log("Se ha ejecutado una función no implementada")
 }
+
+function mostrarMarco(marco) {
+    console.log(marco)
+}
+
 function subirArchivoPDF() {
     var input = document.createElement('input')
     input.type = 'file'
@@ -31,7 +36,9 @@ function subirArchivoPDF() {
                 referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
                 body: JSON.stringify(reader.result), // body data type must match "Content-Type" header
             }).then(data => {
-                console.log("resupesta")
+                if (data.status == 200) {
+                    mostrarMarco(data)
+                }
             })
             console.log("Archivo enviado")
 

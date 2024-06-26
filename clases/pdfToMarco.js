@@ -142,8 +142,7 @@ function procesarTexto(text) {
                     //Al crear un nuevo resultado de aprendizaje, limpiamos la numeración que lleve al principio
                     let limpiarRA = "^[1-9]\\.\\s"
                     let cleanRA = linea.replace(limpiarRA, "") //El string limpio
-                    ra = new ResultadoAprendizajeDTO(cleanRA, index);
-                    console.log("Hemos creado un criterio de evaluación")
+                    ra = new ResultadoAprendizajeDTO(cleanRA, index)
                     //Marcamos los criterios de evaluación como false
                     //hasta que lleguemos a los ces de este ra
                     criteriosEvaluacion = false;
@@ -209,25 +208,29 @@ function procesarTexto(text) {
     })
 
     return marco;
-
 }
 
 
 //Funcion que procesa el contenido de un pdf y extrae el marco de competencias
 //Acepta el contenido del pdf como base64 tal y como se recibe en la petición
 export function pdfToMarco(body) {
-    console.log("Hemos entrado a procesar el marco")
-    let file = base64toPdf(JSON.parse(body))
-    let dataBuffer = fs.readFileSync(file)
-    //Esto sería mas interesante procesarlo página a página, porque tal y como está ahora 
-    //Cargas todo
-    pdf(dataBuffer).then(function (data) {
-        console.log("Numero de páginas: ", data.numpages)
+    return new Promise(function (resolve, err) {
+        console.log("Hemos entrado a procesar el marco")
+        let file = base64toPdf(JSON.parse(body))
+        let dataBuffer = fs.readFileSync(file)
+        //Esto sería mas interesante procesarlo página a página, porque tal y como está ahora 
+        //Cargas todo
+        pdf(dataBuffer).then(function (data) {
+            console.log("Numero de páginas: ", data.numpages)
 
-        let marco = procesarTexto(data.text)
-        marco.iniciarMarco()
-        console.log(marco)
-    }).catch(function (err) {
-        console.log("Se ha producido un error procesando el archivo pdf: ", err, err.msg)
+            let marco = procesarTexto(data.text)
+            marco.iniciarMarco()
+
+            console.log("Devolvemos marco:", marco)
+            resolve(marco)
+        }).catch(function (err) {
+            console.log("Se ha producido un error procesando el archivo pdf: ", err, err.msg)
+        })
     })
+
 }

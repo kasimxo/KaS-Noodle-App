@@ -49,9 +49,11 @@ app.post('/procesadormarco', function (req, res) {
         body += chunk.toString()
     })
     req.on('end', () => {
-        let marcoJSON = pdfToMarco(body)
-        console.log("We are donete")
-        res.end("Donete")
+        pdfToMarco(body).then((marcoJSON) => {
+            console.log("Se ha ejectuado la promesa", marcoJSON)
+            res.send(marcoJSON)
+            //res.status(201).end("NEPE")
+        })
     })
 })
 
